@@ -108,21 +108,28 @@
 
 
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="标签">
-<meta property="og:url" content="http://asfara.github.io/tags/index.html">
+  <meta name="description" content="基础架构 MySQL 的逻辑架构图  连接器客户端建立连接时连接器会通过用户名密码认证身份，并从权限表中查询用户权限，因此修改用户的权限不会影响已建立的连接，只要再新建的连接才会使用新的权限设置。 通过 wait_timeout 可以设置连接器自动断开连接的空闲时间 频繁建立连接会消耗性能，长链接占用的资源会不断增大，可以使用以下2种策略：  定期断开或者执行过一个占用内存的大查询后断开连接 My">
+<meta name="keywords" content="MySQL,架构,SQL流程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一条SQL语句的执行">
+<meta property="og:url" content="http://asfara.github.io/MySQL专栏/一条SQL语句的执行/index.html">
 <meta property="og:site_name" content="N Notes">
+<meta property="og:description" content="基础架构 MySQL 的逻辑架构图  连接器客户端建立连接时连接器会通过用户名密码认证身份，并从权限表中查询用户权限，因此修改用户的权限不会影响已建立的连接，只要再新建的连接才会使用新的权限设置。 通过 wait_timeout 可以设置连接器自动断开连接的空闲时间 频繁建立连接会消耗性能，长链接占用的资源会不断增大，可以使用以下2种策略：  定期断开或者执行过一个占用内存的大查询后断开连接 My">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-12-06T09:45:58.400Z">
+<meta property="og:image" content="https://blog-1258243531.cos.ap-shanghai.myqcloud.com/MySQL%E4%B8%93%E6%A0%8F/MySQL%E7%9A%84%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84%E5%9B%BE.png">
+<meta property="og:image" content="https://blog-1258243531.cos.ap-shanghai.myqcloud.com/MySQL%E4%B8%93%E6%A0%8F/%E6%9B%B4%E6%96%B0%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B.png">
+<meta property="og:updated_time" content="2018-12-12T08:42:31.277Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="标签">
+<meta name="twitter:title" content="一条SQL语句的执行">
+<meta name="twitter:description" content="基础架构 MySQL 的逻辑架构图  连接器客户端建立连接时连接器会通过用户名密码认证身份，并从权限表中查询用户权限，因此修改用户的权限不会影响已建立的连接，只要再新建的连接才会使用新的权限设置。 通过 wait_timeout 可以设置连接器自动断开连接的空闲时间 频繁建立连接会消耗性能，长链接占用的资源会不断增大，可以使用以下2种策略：  定期断开或者执行过一个占用内存的大查询后断开连接 My">
+<meta name="twitter:image" content="https://blog-1258243531.cos.ap-shanghai.myqcloud.com/MySQL%E4%B8%93%E6%A0%8F/MySQL%E7%9A%84%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84%E5%9B%BE.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://asfara.github.io/tags/">
+  <link rel="canonical" href="http://asfara.github.io/MySQL专栏/一条SQL语句的执行/">
 
 
 
@@ -132,7 +139,7 @@
   };
 </script>
 
-  <title>标签 | N Notes</title>
+  <title>一条SQL语句的执行 | N Notes</title>
   
 
 
@@ -243,7 +250,7 @@
         
         
           
-          <li class="menu-item menu-item-tags menu-item-active">
+          <li class="menu-item menu-item-tags">
 
     
     
@@ -363,97 +370,270 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://asfara.github.io/MySQL专栏/一条SQL语句的执行/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Neil Li">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://blog-1258243531.cos.ap-shanghai.myqcloud.com/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="N Notes">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-<h1 class="post-title" itemprop="name headline">标签</h1>
-
-<div class="post-meta">
-  
-  
-
-
-
-</div>
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <div class="tag-cloud">
-            <div class="tag-cloud-title">
+          <h1 class="post-title" itemprop="name headline">一条SQL语句的执行
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-12 10:30:37 / 修改时间：16:42:31" itemprop="dateCreated datePublished" datetime="2018-12-12T10:30:37+08:00">2018-12-12</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/读书笔记/" itemprop="url" rel="index"><span itemprop="name">读书笔记</span></a></span>
+
                 
                 
-                  
-                    
-                  
+                  ，
                 
-                  
-                    
-                  
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/读书笔记/MySQL专栏/" itemprop="url" rel="index"><span itemprop="name">MySQL专栏</span></a></span>
+
                 
-                  
-                    
-                  
                 
-                  
-                    
-                  
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
                 
-                  
-                    
-                  
+                  <span class="post-meta-item-text">本文字数：</span>
                 
-                目前共计 5 个标签
+                <span title="本文字数">776</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">1 分钟</span>
+              
             </div>
-            <div class="tag-cloud-tags">
-              <a href="/tags/MySQL/" style="font-size: 30px; color: #111">MySQL</a> <a href="/tags/SQL流程/" style="font-size: 12px; color: #ccc">SQL流程</a> <a href="/tags/事务/" style="font-size: 12px; color: #ccc">事务</a> <a href="/tags/架构/" style="font-size: 12px; color: #ccc">架构</a> <a href="/tags/索引/" style="font-size: 12px; color: #ccc">索引</a>
-            </div>
-          </div>
-        
-      </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <h2 id="基础架构"><a href="#基础架构" class="headerlink" title="基础架构"></a>基础架构</h2><p><img src="https://blog-1258243531.cos.ap-shanghai.myqcloud.com/MySQL%E4%B8%93%E6%A0%8F/MySQL%E7%9A%84%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84%E5%9B%BE.png" alt="MySQL 的逻辑架构图"></p>
+<center>MySQL 的逻辑架构图</center>
+
+<h3 id="连接器"><a href="#连接器" class="headerlink" title="连接器"></a>连接器</h3><p>客户端建立连接时连接器会通过用户名密码认证身份，并从权限表中查询用户权限，因此修改用户的权限不会影响已建立的连接，只要再新建的连接才会使用新的权限设置。</p>
+<p>通过 wait_timeout 可以设置连接器自动断开连接的空闲时间</p>
+<p>频繁建立连接会消耗性能，长链接占用的资源会不断增大，可以使用以下2种策略：</p>
+<ul>
+<li>定期断开或者执行过一个占用内存的大查询后断开连接</li>
+<li>MySQL 5.7或更新版本可以通过执行 mysql_reset_connection 重置连接资源</li>
+</ul>
+<h3 id="查询缓存"><a href="#查询缓存" class="headerlink" title="查询缓存"></a>查询缓存</h3><p>查询语句会进入查询缓存，如果命中缓存会直接返回结果。</p>
+<p>不建议使用查询缓存，因为只要表一更新就会清空相关的缓存。</p>
+<p>将参数 query_cache_type 设置为 DEMAND 表示默认不使用缓存，需要使用缓存的语句可以用 SQL_CACHE 显示指定，如：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">SQL_CACHE</span> * <span class="keyword">from</span> T <span class="keyword">where</span> <span class="keyword">ID</span>=<span class="number">10</span>;</span><br></pre></td></tr></table></figure></p>
+<p>MySQL 8.0 删除了查询缓存的功能。</p>
+<h3 id="分析器"><a href="#分析器" class="headerlink" title="分析器"></a>分析器</h3><p>分析器对 SQL 语句进行词法分析和语法分析。</p>
+<h3 id="优化器"><a href="#优化器" class="headerlink" title="优化器"></a>优化器</h3><p>优化器决定执行 SQL 语句的路径和策略。</p>
+<h3 id="执行器"><a href="#执行器" class="headerlink" title="执行器"></a>执行器</h3><p>执行器先判断有没有表的操作权限，然后根据表的引擎定义使用相应的接口。例如下面一个 SQL 语句的执行流程：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> T <span class="keyword">where</span> <span class="keyword">ID</span>=<span class="number">10</span>;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>调用 InnoDB 引擎接口取这个表的第一行，判断 ID 值是不是 10，如果不是则跳过，如果是则将这行存在结果集中；</li>
+<li>调用引擎接口取“下一行”，重复相同的判断逻辑，直到取到这个表的最后一行。</li>
+<li>执行器将上述遍历过程中所有满足条件的行组成的记录集作为结果集返回给客户端。</li>
+</ol>
+<p>使用索引的流程和上面差不多，第一次调用“取满足条件的第一行”，之后调用“满足条件的下一行”。</p>
+<h3 id="更新语句的执行流程"><a href="#更新语句的执行流程" class="headerlink" title="更新语句的执行流程"></a>更新语句的执行流程</h3><p><img src="https://blog-1258243531.cos.ap-shanghai.myqcloud.com/MySQL%E4%B8%93%E6%A0%8F/%E6%9B%B4%E6%96%B0%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B.png" alt="更新语句的执行流程"></p>
+
       
     </div>
-    
-
-
 
     
+      
+
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/MySQL专栏/深入浅出索引/" rel="bookmark">深入浅出索引</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/MySQL专栏/事务隔离/" rel="bookmark">事务隔离</a></div>
+      
+    </li>
+  
+  </ul>
+
+
+    
+
     
     
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          
+            <a href="/tags/架构/" rel="tag"># 架构</a>
+          
+            <a href="/tags/SQL流程/" rel="tag"># SQL流程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/MySQL专栏/事务隔离/" rel="prev" title="事务隔离">
+                事务隔离 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
   </div>
 
 
@@ -483,8 +663,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -592,6 +781,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础架构"><span class="nav-number">1.</span> <span class="nav-text">基础架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#连接器"><span class="nav-number">1.1.</span> <span class="nav-text">连接器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询缓存"><span class="nav-number">1.2.</span> <span class="nav-text">查询缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析器"><span class="nav-number">1.3.</span> <span class="nav-text">分析器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优化器"><span class="nav-number">1.4.</span> <span class="nav-text">优化器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行器"><span class="nav-number">1.5.</span> <span class="nav-text">执行器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更新语句的执行流程"><span class="nav-number">1.6.</span> <span class="nav-text">更新语句的执行流程</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
