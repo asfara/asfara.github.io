@@ -11,5 +11,5 @@ Disallow: /fonts/
 Disallow: /vendors/
 Disallow: /fancybox/
 
-Sitemap: https://hoxis.github.io/sitemap.xml
-Sitemap: https://hoxis.github.io/baidusitemap.xml
+Sitemap: https://asfara.github.io/sitemap.xml
+Sitemap: https://asfara.github.io/baidusitemap.xml
