@@ -86,7 +86,7 @@
     root: '/',
     scheme: 'Gemini',
     version: '6.6.0',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
     fancybox: false,
     fastclick: false,
     lazyload: false,
@@ -108,25 +108,28 @@
 
 
 
-  <meta name="description" content="概念事务特性：  Atomicity 原子性 Consistency 一致性 Isolation 隔离行 Durability 持久性  多个事务同时执行可能产生的问题： 脏读（dirty read）、不可重复读（non-repeatable read）、幻读（phantom read）。 隔离级别：  读未提交（read uncommitted）。一个事务还未提交时，它做的变更就能被其他事务看到">
-<meta name="keywords" content="MySQL,事务">
+  <meta name="description" content="基础架构 MySQL 的逻辑架构图  连接器客户端建立连接时连接器会通过用户名密码认证身份，并从权限表中查询用户权限，因此修改用户的权限不会影响已建立的连接，只有再新建的连接才会使用新的权限设置。 通过 wait_timeout 可以设置连接器自动断开连接的空闲时间 频繁建立连接会消耗性能，长连接占用的资源会不断增大，可以使用以下2种策略：  定期断开或者执行过一个占用内存的大查询后断开连接 My">
+<meta name="keywords" content="MySQL,架构,SQL流程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="事务隔离">
-<meta property="og:url" content="http://asfara.github.io/MySQL专栏/事务隔离/index.html">
+<meta property="og:title" content="一条SQL语句的执行">
+<meta property="og:url" content="http://asfara.github.io/读书笔记/MySQL专栏/一条SQL语句的执行/index.html">
 <meta property="og:site_name" content="N Notes">
-<meta property="og:description" content="概念事务特性：  Atomicity 原子性 Consistency 一致性 Isolation 隔离行 Durability 持久性  多个事务同时执行可能产生的问题： 脏读（dirty read）、不可重复读（non-repeatable read）、幻读（phantom read）。 隔离级别：  读未提交（read uncommitted）。一个事务还未提交时，它做的变更就能被其他事务看到">
+<meta property="og:description" content="基础架构 MySQL 的逻辑架构图  连接器客户端建立连接时连接器会通过用户名密码认证身份，并从权限表中查询用户权限，因此修改用户的权限不会影响已建立的连接，只有再新建的连接才会使用新的权限设置。 通过 wait_timeout 可以设置连接器自动断开连接的空闲时间 频繁建立连接会消耗性能，长连接占用的资源会不断增大，可以使用以下2种策略：  定期断开或者执行过一个占用内存的大查询后断开连接 My">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-12-12T09:22:14.185Z">
+<meta property="og:image" content="https://blog-1258243531.cos.ap-shanghai.myqcloud.com/MySQL%E4%B8%93%E6%A0%8F/MySQL%E7%9A%84%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84%E5%9B%BE.png">
+<meta property="og:image" content="https://blog-1258243531.cos.ap-shanghai.myqcloud.com/MySQL%E4%B8%93%E6%A0%8F/%E6%9B%B4%E6%96%B0%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B.png">
+<meta property="og:updated_time" content="2018-12-12T12:19:32.393Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="事务隔离">
-<meta name="twitter:description" content="概念事务特性：  Atomicity 原子性 Consistency 一致性 Isolation 隔离行 Durability 持久性  多个事务同时执行可能产生的问题： 脏读（dirty read）、不可重复读（non-repeatable read）、幻读（phantom read）。 隔离级别：  读未提交（read uncommitted）。一个事务还未提交时，它做的变更就能被其他事务看到">
+<meta name="twitter:title" content="一条SQL语句的执行">
+<meta name="twitter:description" content="基础架构 MySQL 的逻辑架构图  连接器客户端建立连接时连接器会通过用户名密码认证身份，并从权限表中查询用户权限，因此修改用户的权限不会影响已建立的连接，只有再新建的连接才会使用新的权限设置。 通过 wait_timeout 可以设置连接器自动断开连接的空闲时间 频繁建立连接会消耗性能，长连接占用的资源会不断增大，可以使用以下2种策略：  定期断开或者执行过一个占用内存的大查询后断开连接 My">
+<meta name="twitter:image" content="https://blog-1258243531.cos.ap-shanghai.myqcloud.com/MySQL%E4%B8%93%E6%A0%8F/MySQL%E7%9A%84%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84%E5%9B%BE.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://asfara.github.io/MySQL专栏/事务隔离/">
+  <link rel="canonical" href="http://asfara.github.io/读书笔记/MySQL专栏/一条SQL语句的执行/">
 
 
 
@@ -136,7 +139,7 @@
   };
 </script>
 
-  <title>事务隔离 | N Notes</title>
+  <title>一条SQL语句的执行 | N Notes</title>
   
 
 
@@ -387,7 +390,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://asfara.github.io/MySQL专栏/事务隔离/">
+    <link itemprop="mainEntityOfPage" href="http://asfara.github.io/读书笔记/MySQL专栏/一条SQL语句的执行/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Neil Li">
@@ -404,7 +407,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">事务隔离
+          <h1 class="post-title" itemprop="name headline">一条SQL语句的执行
               
             
           </h1>
@@ -429,7 +432,7 @@
                 
               
 
-              <time title="创建时间：2018-12-12 15:30:37 / 修改时间：17:22:14" itemprop="dateCreated datePublished" datetime="2018-12-12T15:30:37+08:00">2018-12-12</time>
+              <time title="创建时间：2018-12-12 10:30:37 / 修改时间：20:19:32" itemprop="dateCreated datePublished" datetime="2018-12-12T10:30:37+08:00">2018-12-12</time>
             
 
             
@@ -486,7 +489,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">524</span>
+                <span title="本文字数">776</span>
               
 
               
@@ -520,25 +523,30 @@
       
 
       
-        <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>事务特性：</p>
+        <h2 id="基础架构"><a href="#基础架构" class="headerlink" title="基础架构"></a>基础架构</h2><p><img src="https://blog-1258243531.cos.ap-shanghai.myqcloud.com/MySQL%E4%B8%93%E6%A0%8F/MySQL%E7%9A%84%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84%E5%9B%BE.png" alt="MySQL 的逻辑架构图"></p>
+<center>MySQL 的逻辑架构图</center>
+
+<h3 id="连接器"><a href="#连接器" class="headerlink" title="连接器"></a>连接器</h3><p>客户端建立连接时连接器会通过用户名密码认证身份，并从权限表中查询用户权限，因此修改用户的权限不会影响已建立的连接，只有再新建的连接才会使用新的权限设置。</p>
+<p>通过 wait_timeout 可以设置连接器自动断开连接的空闲时间</p>
+<p>频繁建立连接会消耗性能，长连接占用的资源会不断增大，可以使用以下2种策略：</p>
 <ul>
-<li>Atomicity 原子性</li>
-<li>Consistency 一致性</li>
-<li>Isolation 隔离行</li>
-<li>Durability 持久性</li>
+<li>定期断开或者执行过一个占用内存的大查询后断开连接</li>
+<li>MySQL 5.7或更新版本可以通过执行 mysql_reset_connection 重置连接资源</li>
 </ul>
-<p>多个事务同时执行可能产生的问题： 脏读（dirty read）、不可重复读（non-repeatable read）、幻读（phantom read）。</p>
-<p>隔离级别：</p>
-<ul>
-<li>读未提交（read uncommitted）。一个事务还未提交时，它做的变更就能被其他事务看到。</li>
-<li>读提交（read commit）。一个事务提交之后，它做的变更才会被其他事务看到。</li>
-<li>可重复读（repeatable read）。一个事务执行过程中看到的数据总是跟事务启动时一致的。</li>
-<li>串行化（serializable）。对于同一行记录“读”会加“读锁”，“写”会加“写锁”，事务执行完成后才会解锁。</li>
-</ul>
-<p>以上隔离级别并行性能依次降低，安全性依次提高。</p>
-<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>只提及了可重复读的实现方式。</p>
-<p>MySQL中每条记录在更新的时候都会同时记录一条回滚操作，不同时刻启动的事务会有不同的read-view。当没有比回滚日志更早启动的事务时，回滚日志会被删除。</p>
-<p>长事务会导致系统会存在大量的回滚日志，占用大量存储空间。极端情况回滚日志占用空间会远大于数据占用的。</p>
+<h3 id="查询缓存"><a href="#查询缓存" class="headerlink" title="查询缓存"></a>查询缓存</h3><p>查询语句会进入查询缓存，如果命中缓存会直接返回结果。</p>
+<p>不建议使用查询缓存，因为只要表一更新就会清空相关的缓存。</p>
+<p>将参数 query_cache_type 设置为 DEMAND 表示默认不使用缓存，需要使用缓存的语句可以用 SQL_CACHE 显示指定，如：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">SQL_CACHE</span> * <span class="keyword">from</span> T <span class="keyword">where</span> <span class="keyword">ID</span>=<span class="number">10</span>;</span><br></pre></td></tr></table></figure></p>
+<p>MySQL 8.0 删除了查询缓存的功能。</p>
+<h3 id="分析器"><a href="#分析器" class="headerlink" title="分析器"></a>分析器</h3><p>分析器对 SQL 语句进行词法分析和语法分析。</p>
+<h3 id="优化器"><a href="#优化器" class="headerlink" title="优化器"></a>优化器</h3><p>优化器决定执行 SQL 语句的路径和策略。</p>
+<h3 id="执行器"><a href="#执行器" class="headerlink" title="执行器"></a>执行器</h3><p>执行器先判断有没有表的操作权限，然后根据表的引擎定义使用相应的接口。例如下面一个 SQL 语句的执行流程：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> T <span class="keyword">where</span> <span class="keyword">ID</span>=<span class="number">10</span>;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>调用 InnoDB 引擎接口取这个表的第一行，判断 ID 值是不是 10，如果不是则跳过，如果是则将这行存在结果集中；</li>
+<li>调用引擎接口取“下一行”，重复相同的判断逻辑，直到取到这个表的最后一行。</li>
+<li>执行器将上述遍历过程中所有满足条件的行组成的记录集作为结果集返回给客户端。</li>
+</ol>
+<p>使用索引的流程和上面差不多，第一次调用“取满足条件的第一行”，之后调用“满足条件的下一行”。</p>
+<h3 id="更新语句的执行流程"><a href="#更新语句的执行流程" class="headerlink" title="更新语句的执行流程"></a>更新语句的执行流程</h3><p><img src="https://blog-1258243531.cos.ap-shanghai.myqcloud.com/MySQL%E4%B8%93%E6%A0%8F/%E6%9B%B4%E6%96%B0%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B.png" alt="更新语句的执行流程"></p>
 
       
     </div>
@@ -552,14 +560,14 @@
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/MySQL专栏/一条SQL语句的执行/" rel="bookmark">一条SQL语句的执行</a></div>
+      <div class="popular-posts-title"><a href="/读书笔记/MySQL专栏/事务隔离/" rel="bookmark">事务隔离</a></div>
       
     </li>
   
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/MySQL专栏/深入浅出索引/" rel="bookmark">深入浅出索引</a></div>
+      <div class="popular-posts-title"><a href="/读书笔记/MySQL专栏/深入浅出索引/" rel="bookmark">深入浅出索引</a></div>
       
     </li>
   
@@ -587,7 +595,9 @@
           
             <a href="/tags/MySQL/" rel="tag"># MySQL</a>
           
-            <a href="/tags/事务/" rel="tag"># 事务</a>
+            <a href="/tags/架构/" rel="tag"># 架构</a>
+          
+            <a href="/tags/SQL流程/" rel="tag"># SQL流程</a>
           
         </div>
       
@@ -600,18 +610,14 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/MySQL专栏/一条SQL语句的执行/" rel="next" title="一条SQL语句的执行">
-                <i class="fa fa-chevron-left"></i> 一条SQL语句的执行
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/MySQL专栏/深入浅出索引/" rel="prev" title="深入浅出索引">
-                深入浅出索引 <i class="fa fa-chevron-right"></i>
+              <a href="/读书笔记/MySQL专栏/事务隔离/" rel="prev" title="事务隔离">
+                事务隔离 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -763,6 +769,15 @@
           
 
           
+             <div class="cc-license motion-element" itemprop="license">
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+             </div>
+          
 
           
           
@@ -785,7 +800,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现"><span class="nav-number">2.</span> <span class="nav-text">实现</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础架构"><span class="nav-number">1.</span> <span class="nav-text">基础架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#连接器"><span class="nav-number">1.1.</span> <span class="nav-text">连接器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询缓存"><span class="nav-number">1.2.</span> <span class="nav-text">查询缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析器"><span class="nav-number">1.3.</span> <span class="nav-text">分析器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优化器"><span class="nav-number">1.4.</span> <span class="nav-text">优化器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行器"><span class="nav-number">1.5.</span> <span class="nav-text">执行器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更新语句的执行流程"><span class="nav-number">1.6.</span> <span class="nav-text">更新语句的执行流程</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -793,6 +808,13 @@
       <!--/noindex-->
       
 
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
       
 
     </div>
@@ -851,11 +873,6 @@
       </div>
     </footer>
 
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
     
 
     
