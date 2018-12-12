@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="N Notes">
 <meta property="og:description" content="索引的常见模型 哈希表。以 key-value 存储数据，value 以链表的形式存储以解决 key 冲突的问题。哈希表是无序的，增加数据时速度很快，区间查询时需要全表扫描。因此哈希表只适用于只有等值查询的场景，如 Memcached 及其他一些 NoSQL 引擎。  有序数组。有序数组在等值查询和范围查询的场景中性能都非常优秀，但是增加记录时需要挪动后面所有记录，因此只适用于静态存储引擎。  二">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-12-12T11:51:28.030Z">
+<meta property="og:updated_time" content="2018-12-12T11:56:57.771Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入浅出索引">
 <meta name="twitter:description" content="索引的常见模型 哈希表。以 key-value 存储数据，value 以链表的形式存储以解决 key 冲突的问题。哈希表是无序的，增加数据时速度很快，区间查询时需要全表扫描。因此哈希表只适用于只有等值查询的场景，如 Memcached 及其他一些 NoSQL 引擎。  有序数组。有序数组在等值查询和范围查询的场景中性能都非常优秀，但是增加记录时需要挪动后面所有记录，因此只适用于静态存储引擎。  二">
@@ -429,7 +429,7 @@
                 
               
 
-              <time title="创建时间：2018-12-12 17:30:37 / 修改时间：19:51:28" itemprop="dateCreated datePublished" datetime="2018-12-12T17:30:37+08:00">2018-12-12</time>
+              <time title="创建时间：2018-12-12 17:30:37 / 修改时间：19:56:57" itemprop="dateCreated datePublished" datetime="2018-12-12T17:30:37+08:00">2018-12-12</time>
             
 
             
@@ -521,17 +521,17 @@
 
       
         <h2 id="索引的常见模型"><a href="#索引的常见模型" class="headerlink" title="索引的常见模型"></a>索引的常见模型</h2><ul>
-<li><p>哈希表。以 key-value 存储数据，value 以链表的形式存储以解决 key 冲突的问题。哈希表是无序的，增加数据时速度很快，区间查询时需要全表扫描。因此<br>哈希表只适用于只有等值查询的场景，如 Memcached 及其他一些 NoSQL 引擎。</p>
+<li><p>哈希表。以 key-value 存储数据，value 以链表的形式存储以解决 key 冲突的问题。哈希表是无序的，增加数据时速度很快，区间查询时需要全表扫描。因此哈希表只适用于只有等值查询的场景，如 Memcached 及其他一些 NoSQL 引擎。</p>
 </li>
 <li><p>有序数组。有序数组在等值查询和范围查询的场景中性能都非常优秀，但是增加记录时需要挪动后面所有记录，因此只适用于静态存储引擎。</p>
 </li>
-<li><p>二叉搜索树。每个节点的左儿子小于父节点，父节点小于右儿子。二叉搜索树搜索效率是最高的，但是树高太高，读取磁盘次数太多导致查询速度过慢，因此大多数<br>数据库使用N叉树，子节点之间的大小保证从左到右递增。N叉树中的“N”取决于数据块的大小。</p>
+<li><p>二叉搜索树。每个节点的左儿子小于父节点，父节点小于右儿子。二叉搜索树搜索效率是最高的，但是树高太高，读取磁盘次数太多导致查询速度过慢，因此大多数数据库使用N叉树，子节点之间的大小保证从左到右递增。N叉树中的“N”取决于数据块的大小。</p>
 </li>
 </ul>
-<h2 id="InnoDB-的索引模型"><a href="#InnoDB-的索引模型" class="headerlink" title="InnoDB 的索引模型"></a>InnoDB 的索引模型</h2><p>InnoDB 使用 B+ 树索引模型，所有数据都存储在 B+ 树中，每一个索引对应一棵 B+ 树，主键索引存储所有数据，非主键索引只存储索引字段及主键。使用非主键索引查询时需要<br>到主键索引树中查询其余数据，即回表。</p>
+<h2 id="InnoDB-的索引模型"><a href="#InnoDB-的索引模型" class="headerlink" title="InnoDB 的索引模型"></a>InnoDB 的索引模型</h2><p>InnoDB 使用 B+ 树索引模型，所有数据都存储在 B+ 树中，每一个索引对应一棵 B+ 树，主键索引存储所有数据，非主键索引只存储索引字段及主键。使用非主键索引查询时需要到主键索引树中查询其余数据，即回表。</p>
 <p>主键长度越小，普通索引占用空间越小，因此尽量使用自增 ID 做为主键。</p>
 <h2 id="覆盖索引"><a href="#覆盖索引" class="headerlink" title="覆盖索引"></a>覆盖索引</h2><p>当 ID 为主键，建立了 k 索引时，执行：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">ID</span> <span class="keyword">from</span> T <span class="keyword">where</span> k=<span class="number">3</span>;</span><br></pre></td></tr></table></figure></p>
-<p>由于 k 索引中存储了主键 ID，不需要再回到主键索引查询其他数据，这种情况称为覆盖索引。由于覆盖索引可以减少树的搜索次数，显著提升性能，所以使用覆盖索引是一个常用<br>的性能优化手段。如：为高频查询请求建立联合索引，覆盖查询需求。</p>
+<p>由于 k 索引中存储了主键 ID，不需要再回到主键索引查询其他数据，这种情况称为覆盖索引。由于覆盖索引可以减少树的搜索次数，显著提升性能，所以使用覆盖索引是一个常用的性能优化手段。如：为高频查询请求建立联合索引，覆盖查询需求。</p>
 <h2 id="最左前缀原则"><a href="#最左前缀原则" class="headerlink" title="最左前缀原则"></a>最左前缀原则</h2><p>假如有联合索引 (k1, k2)，查询条件 <code>where k1=10</code> 也能用上这个索引，而查询条件 <code>where k2=10</code> 则不能用。</p>
 <p>在建立联合索引的时候，如果通过调整顺序，可以少维护一个索引，则这个顺序需要优先考虑，其次考虑字段占用的空间大小。</p>
 <h2 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h2><p>有联合索引 (k1, k2)，查询条件 <code>where k1=3 and k2=5</code>。在 MySQL 5.6 之前，只能使用 k1 在索引树上查询，再回表到主键索引上比对 k2 的值。</p>
@@ -549,14 +549,14 @@
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/MySQL专栏/一条SQL语句的执行/" rel="bookmark">一条SQL语句的执行</a></div>
+      <div class="popular-posts-title"><a href="/MySQL专栏/事务隔离/" rel="bookmark">事务隔离</a></div>
       
     </li>
   
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/MySQL专栏/事务隔离/" rel="bookmark">事务隔离</a></div>
+      <div class="popular-posts-title"><a href="/MySQL专栏/一条SQL语句的执行/" rel="bookmark">一条SQL语句的执行</a></div>
       
     </li>
   
